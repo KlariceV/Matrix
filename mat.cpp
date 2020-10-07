@@ -1,4 +1,4 @@
-#include "mat.h"
+#include "Matrix/mat.h"
 
 Matrix::Matrix() {
     this->nRows = 0;

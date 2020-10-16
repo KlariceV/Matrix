@@ -18,6 +18,19 @@ Matrix::Matrix(uint _r, uint _c) {
         }
     }
 }
+Matrix::Matrix(uint _d) {
+    this->nRows = _d;
+    this->nCols = _d;
+    this->m = new double*[this->nRows];
+    for(uint r = 0; r < this->nRows; r++) {
+        this->m[r] = new double[this->nCols];
+    }
+    for(uint r = 0; r < this->nRows; r++) {
+        for(uint c = 0; c < this->nCols; c++) {
+            this->m[r][c] = 0;
+        }
+    }
+}
 Matrix::Matrix(const Matrix& m) {
     this->nRows = m.nRows;
     this->nCols = m.nCols;
@@ -149,10 +162,25 @@ Matrix& Matrix::operator/=(const double& d) {
     *this = *this / d;
     return *this;
 }
-void Matrix::randomize() {
+Matrix& Matrix::randomize() {
     for(uint r = 0; r < this->nRows; r++) {
         for(uint c = 0; c < this->nCols; c++) {
             this->m[r][c] = rand()/(float)RAND_MAX;
         }
+    }
+    return *this;
+}
+Matrix& Matrix::identity() {
+    if(this->nRows != this->nCols) {
+        std::cout << "ERROR: NOT SQUARE\n";
+        return *this;
+    } else {
+        for(uint r = 0; r < this->nRows; r++) {
+            for(uint c = 0; c < this->nCols; c++) {
+                if(r == c) {this->m[r][c] = 1;}
+                else {this->m[r][c] = 0;}
+            }
+        }
+        return *this;
     }
 }

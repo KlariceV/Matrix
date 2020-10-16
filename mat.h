@@ -10,6 +10,7 @@ class Matrix {
     public:
         Matrix();
         Matrix(uint r_, uint c_);
+        Matrix(uint d_);
         Matrix(const Matrix& m);
         ~Matrix();
 
@@ -39,5 +40,6 @@ class Matrix {
             }
             return os;
         }
-        void randomize();
+        Matrix& randomize();
+        Matrix& identity();
 };

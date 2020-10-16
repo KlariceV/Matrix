@@ -80,87 +80,125 @@ Matrix& Matrix::operator=(const Matrix& m) {
     }
     return *this;
 }
-Matrix Matrix::operator+(const Matrix& m) {
-    if(this->nRows != m.nRows || this->nCols != m.nCols) {
+
+Matrix Matrix::add(const Matrix& m1, const Matrix& m2) {
+    if(m1.nRows != m2.nRows || m1.nCols != m2.nCols) {
         std::cout << "ERROR: DIM MISMATCH\n";
-        return *this;
+        return m1;
     } else {
-        Matrix n(m.nRows, m.nCols);
-        for(uint r = 0; r < m.nRows; r++) {
-            for(uint c = 0; c < m.nCols; c++) {
-                n.m[r][c] = this->m[r][c] + m.m[r][c];
+        Matrix n(m1.nRows, m1.nCols);
+        for(uint r = 0; r < m1.nRows; r++) {
+            for(uint c = 0; c < m1.nCols; c++) {
+                n.m[r][c] = m1.m[r][c] + m2.m[r][c];
             }
         }
         return n;
     }
 }
-Matrix Matrix::operator-(const Matrix& m) {
-    if(this->nRows != m.nRows || this->nCols != m.nCols) {
+Matrix Matrix::add(const Matrix& m1, const double& d) {
+    Matrix n(m1.nRows, m1.nCols);
+    for(uint r = 0; r < m1.nRows; r++) {
+        for(uint c = 0; c < m1.nCols; c++) {
+            n.m[r][c] = m1.m[r][c] + d;
+        }
+    }
+    return n;
+}
+Matrix Matrix::subtract(const Matrix& m1, const Matrix& m2) {
+    if(m1.nRows != m2.nRows || m1.nCols != m2.nCols) {
         std::cout << "ERROR: DIM MISMATCH\n";
-        return *this;
+        return m1;
     } else {
-        Matrix n(m.nRows, m.nCols);
-        for(uint r = 0; r < m.nRows; r++) {
-            for(uint c = 0; c < m.nCols; c++) {
-                n.m[r][c] = this->m[r][c] - m.m[r][c];
+        Matrix n(m1.nRows, m1.nCols);
+        for(uint r = 0; r < m1.nRows; r++) {
+            for(uint c = 0; c < m1.nCols; c++) {
+                n.m[r][c] = m1.m[r][c] - m2.m[r][c];
             }
         }
         return n;
     }
 }
-Matrix Matrix::operator*(const Matrix& m) {
-    if(this->nCols != m.nRows) {
-        std::cout << "ERROR: DIM MISMATCH\n";
-        return *this;
-    } else {
-        Matrix n(this->nRows, m.nCols);
-        for(uint r = 0; r < this->nRows; r++) {
-            for(uint c = 0; c < m.nCols; c++) {
-                for(uint k = 0; k < this->nCols; k++) {
-                    n.m[r][c] += this->m[r][k] * m.m[k][c];
+Matrix Matrix::subtract(const Matrix& m1, const double& d) {
+    Matrix n(m1.nRows, m1.nCols);
+    for(uint r = 0; r < m1.nRows; r++) {
+        for(uint c = 0; c < m1.nCols; c++) {
+            n.m[r][c] = m1.m[r][c] - d;
+        }
+    }
+    return n;
+}
+Matrix Matrix::multiply(const Matrix& m1, const Matrix& m2, const bool element_wise) {
+    if(element_wise == true) {
+        if(m1.nRows != m2.nRows || m1.nCols != m2.nCols) {
+            std::cout << "ERROR: DIM MISMATCH\n";
+            return m1;
+        } else {
+            Matrix n(m1.nRows, m1.nCols);
+            for(uint r = 0; r < m1.nRows; r++) {
+                for(uint c = 0; c < m1.nCols; c++) {
+                    n.m[r][c] = m1.m[r][c] * m2.m[r][c];
                 }
             }
+            return n;
+        }
+    } else {
+        if(m1.nCols != m2.nRows) {
+            std::cout << "ERROR: DIM MISMATCH\n";
+            return m1;
+        } else {
+            Matrix n(m1.nRows, m2.nCols);
+            for(uint r = 0; r < m1.nRows; r++) {
+                for(uint c = 0; c < m2.nCols; c++) {
+                    for(uint k = 0; k < m1.nCols; k++) {
+                        n.m[r][c] += m1.m[r][k] * m2.m[k][c];
+                    }
+                }
+            }
+            return n;
+        }
+    }
+}
+Matrix Matrix::multiply(const Matrix& m1, const double& d) {
+    Matrix n(m1.nRows, m1.nCols);
+    for(uint r = 0; r < m1.nRows; r++) {
+        for(uint c = 0; c < m1.nCols; c++) {
+            n.m[r][c] = m1.m[r][c] * d;
+        }
+    }
+    return n;
+}
+Matrix Matrix::divide(const Matrix& m1, const Matrix& m2) {
+    if(m1.nRows != m2.nRows || m1.nCols != m2.nCols) {
+        std::cout << "ERROR: DIM MISMATCH\n";
+        return m1;
+    } else {
+        Matrix n(m1.nRows, m1.nCols);
+        for(uint r = 0; r < m1.nRows; r++) {
+            for(uint c = 0; c < m1.nCols; c++) {
+                n.m[r][c] = m1.m[r][c] / m2.m[r][c];
+            }
         }
         return n;
     }
 }
-Matrix Matrix::operator*(const double& d) {
-    Matrix n(this->nRows, this->nCols);
-    for(uint r = 0; r < this->nRows; r++) {
-        for(uint c = 0; c < this->nCols; c++) {
-            n.m[r][c] = this->m[r][c] * d;
+Matrix Matrix::divide(const Matrix& m1, const double& d) {
+    Matrix n(m1.nRows, m1.nCols);
+    for(uint r = 0; r < m1.nRows; r++) {
+        for(uint c = 0; c < m1.nCols; c++) {
+            n.m[r][c] = m1.m[r][c] / d;
         }
     }
     return n;
 }
-Matrix Matrix::operator/(const double& d) {
-    Matrix n(this->nRows, this->nCols);
-    for(uint r = 0; r < this->nRows; r++) {
-        for(uint c = 0; c < this->nCols; c++) {
-            n.m[r][c] = this->m[r][c] / d;
+Matrix Matrix::identity(uint d) {
+    Matrix n(d, d);
+    for(uint r = 0; r < d; r++) {
+        for(uint c = 0; c < d; c++) {
+            if(r == c) {n.m[r][c] = 1;}
+            else {n.m[r][c] = 0;}
         }
     }
     return n;
-}
-Matrix& Matrix::operator+=(const Matrix& m) {
-    *this = *this + m;
-    return *this;
-}
-Matrix& Matrix::operator-=(const Matrix& m) {
-    *this = *this - m;
-    return *this;
-}
-Matrix& Matrix::operator*=(const Matrix& m) {
-    *this = *this * m;
-    return *this;
-}
-Matrix& Matrix::operator*=(const double& d) {
-    *this = *this * d;
-    return *this;
-}
-Matrix& Matrix::operator/=(const double& d) {
-    *this = *this / d;
-    return *this;
 }
 Matrix& Matrix::randomize() {
     for(uint r = 0; r < this->nRows; r++) {
@@ -170,17 +208,12 @@ Matrix& Matrix::randomize() {
     }
     return *this;
 }
-Matrix& Matrix::identity() {
-    if(this->nRows != this->nCols) {
-        std::cout << "ERROR: NOT SQUARE\n";
-        return *this;
-    } else {
-        for(uint r = 0; r < this->nRows; r++) {
-            for(uint c = 0; c < this->nCols; c++) {
-                if(r == c) {this->m[r][c] = 1;}
-                else {this->m[r][c] = 0;}
-            }
+Matrix Matrix::transpose() {
+    Matrix n(this->nCols, this->nRows);
+    for(uint r = 0; r < this->nRows; r++) {
+        for(uint c = 0; c < this->nCols; c++) {
+            n.m[c][r] = this->m[r][c];
         }
-        return *this;
     }
+    return n;
 }

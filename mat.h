@@ -17,18 +17,17 @@ class Matrix {
 
         Matrix& operator=(const Matrix& m);
 
-        Matrix operator+(const Matrix& m);
-        Matrix operator-(const Matrix& m);
-        Matrix operator*(const Matrix& m);
-        Matrix operator*(const double& d);
-        Matrix operator/(const double& d);
+        Matrix static add(const Matrix& m1, const Matrix& m2);
+        Matrix static add(const Matrix& m1, const double& d);
+        Matrix static subtract(const Matrix& m1, const Matrix& m2);
+        Matrix static subtract(const Matrix& m1, const double& d);
+        Matrix static multiply(const Matrix& m1, const Matrix& m2, const bool element_wise = false);
+        Matrix static multiply(const Matrix& m1, const double& d);
+        Matrix static divide(const Matrix& m1, const Matrix& m2);
+        Matrix static divide(const Matrix& m1, const double& d);
 
-        Matrix& operator+=(const Matrix& m);
-        Matrix& operator-=(const Matrix& m);
-        Matrix& operator*=(const Matrix& m);
-        Matrix& operator*=(const double& d);
-        Matrix& operator/=(const double& d);
-
+        Matrix static identity(const uint d);
+        
         inline double* &operator[](uint i) {return this->m[i];}
         
         friend std::ostream& operator<<(std::ostream& os, const Matrix& m) {
@@ -41,5 +40,5 @@ class Matrix {
             return os;
         }
         Matrix& randomize();
-        Matrix& identity();
+        Matrix transpose();
 };

@@ -31,6 +31,15 @@ Matrix::Matrix(uint _d) {
         }
     }
 }
+Matrix::Matrix(const double* d, uint size) {
+    this->nRows = size;
+    this->nCols = 1;
+    this->m = new double*[this->nRows];
+    for(uint r = 0; r < this->nRows; r++) {
+        this->m[r] = new double[this->nCols];
+        this->m[r][0] = d[r];
+    }
+}
 Matrix::Matrix(const Matrix& m) {
     this->nRows = m.nRows;
     this->nCols = m.nCols;
@@ -84,6 +93,7 @@ Matrix& Matrix::operator=(const Matrix& m) {
 Matrix Matrix::add(const Matrix& m1, const Matrix& m2) {
     if(m1.nRows != m2.nRows || m1.nCols != m2.nCols) {
         std::cout << "ERROR: DIM MISMATCH\n";
+        std::cout << m1.nRows << "x" << m1.nCols << " & " << m2.nRows << "x" << m2.nCols << "\n";
         return m1;
     } else {
         Matrix n(m1.nRows, m1.nCols);
@@ -107,6 +117,7 @@ Matrix Matrix::add(const Matrix& m1, const double& d) {
 Matrix Matrix::subtract(const Matrix& m1, const Matrix& m2) {
     if(m1.nRows != m2.nRows || m1.nCols != m2.nCols) {
         std::cout << "ERROR: DIM MISMATCH\n";
+        std::cout << m1.nRows << "x" << m1.nCols << " & " << m2.nRows << "x" << m2.nCols << "\n";
         return m1;
     } else {
         Matrix n(m1.nRows, m1.nCols);
@@ -131,6 +142,7 @@ Matrix Matrix::multiply(const Matrix& m1, const Matrix& m2, const bool element_w
     if(element_wise == true) {
         if(m1.nRows != m2.nRows || m1.nCols != m2.nCols) {
             std::cout << "ERROR: DIM MISMATCH\n";
+            std::cout << m1.nRows << "x" << m1.nCols << " & " << m2.nRows << "x" << m2.nCols << "\n";
             return m1;
         } else {
             Matrix n(m1.nRows, m1.nCols);
@@ -144,6 +156,7 @@ Matrix Matrix::multiply(const Matrix& m1, const Matrix& m2, const bool element_w
     } else {
         if(m1.nCols != m2.nRows) {
             std::cout << "ERROR: DIM MISMATCH\n";
+            std::cout << m1.nRows << "x" << m1.nCols << " & " << m2.nRows << "x" << m2.nCols << "\n";
             return m1;
         } else {
             Matrix n(m1.nRows, m2.nCols);
@@ -170,6 +183,7 @@ Matrix Matrix::multiply(const Matrix& m1, const double& d) {
 Matrix Matrix::divide(const Matrix& m1, const Matrix& m2) {
     if(m1.nRows != m2.nRows || m1.nCols != m2.nCols) {
         std::cout << "ERROR: DIM MISMATCH\n";
+        std::cout << m1.nRows << "x" << m1.nCols << " & " << m2.nRows << "x" << m2.nCols << "\n";
         return m1;
     } else {
         Matrix n(m1.nRows, m1.nCols);
@@ -200,20 +214,29 @@ Matrix Matrix::identity(uint d) {
     }
     return n;
 }
-Matrix& Matrix::randomize() {
-    for(uint r = 0; r < this->nRows; r++) {
-        for(uint c = 0; c < this->nCols; c++) {
-            this->m[r][c] = rand()/(float)RAND_MAX;
-        }
-    }
-    return *this;
-}
-Matrix Matrix::transpose() {
-    Matrix n(this->nCols, this->nRows);
-    for(uint r = 0; r < this->nRows; r++) {
-        for(uint c = 0; c < this->nCols; c++) {
-            n.m[c][r] = this->m[r][c];
+Matrix Matrix::function(const Matrix& m, double (*func)(double)) {
+    Matrix n(m.nRows, m.nCols);
+    for(uint r = 0; r < m.nRows; r++) {
+        for(uint c = 0; c < m.nCols; c++) {
+            n.m[r][c] = func(m.m[r][c]);
         }
     }
     return n;
+}
+Matrix Matrix::transpose(const Matrix& m) {
+    Matrix n(m.nCols, m.nRows);
+    for(uint r = 0; r < m.nRows; r++) {
+        for(uint c = 0; c < m.nCols; c++) {
+            n.m[c][r] = m.m[r][c];
+        }
+    }
+    return n;
+}
+Matrix& Matrix::randomize() {
+    for(uint r = 0; r < this->nRows; r++) {
+        for(uint c = 0; c < this->nCols; c++) {
+            this->m[r][c] = 2*rand()/(float)RAND_MAX-1;
+        }
+    }
+    return *this;
 }

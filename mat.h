@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -11,6 +12,7 @@ class Matrix {
         Matrix();
         Matrix(uint r_, uint c_);
         Matrix(uint d_);
+        Matrix(const double* d, uint size);
         Matrix(const Matrix& m);
         ~Matrix();
 
@@ -27,7 +29,9 @@ class Matrix {
         Matrix static divide(const Matrix& m1, const double& d);
 
         Matrix static identity(const uint d);
-        
+        Matrix static function(const Matrix& m, double (*func)(double));
+        Matrix static transpose(const Matrix& m);
+
         inline double* &operator[](uint i) {return this->m[i];}
         
         friend std::ostream& operator<<(std::ostream& os, const Matrix& m) {
@@ -40,5 +44,4 @@ class Matrix {
             return os;
         }
         Matrix& randomize();
-        Matrix transpose();
 };

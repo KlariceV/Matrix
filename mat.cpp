@@ -235,7 +235,7 @@ Matrix Matrix::transpose(const Matrix& m) {
 Matrix& Matrix::randomize() {
     for(uint r = 0; r < this->nRows; r++) {
         for(uint c = 0; c < this->nCols; c++) {
-            this->m[r][c] = 2*rand()/(float)RAND_MAX-1;
+            this->m[r][c] = -1+2*(rand()/(float)RAND_MAX);
         }
     }
     return *this;
